@@ -17,7 +17,7 @@ app.get('/measurements', async (req, res) => {
 })
 
 app.get('/save', (req, res) => {
-	const { sensorid, time, value } = req.query
+	const { sensorid, time = (new Date()).toISOString().replace(/[^0-9]/g, "").slice(0, -3), value } = req.query
 	const id = measurements.insert({ sensorid, time, value })
 	res.send('')
 })
