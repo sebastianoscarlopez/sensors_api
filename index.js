@@ -17,8 +17,9 @@ app.get('/time', (req, res) => {
 })
 
 app.get('/measurements', async (req, res) => {
-	const { sensorid, time, value } = req.query
-	const values = await measurements.get()
+	const { sensorid, time, value, datalength='10' } = req.query
+	const filter = { sensorid }
+	const values = await measurements.get({ sensorid, limit: parseInt(datalength })
 	res.send(values)
 })
 

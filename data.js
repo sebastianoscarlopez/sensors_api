@@ -18,11 +18,11 @@ export const measurements = {
 			collection.insertOne({ sensorid, time, value })
 		})
 	},
-	get: async () => {
+	get: async ({ filter, limit }) => {
 		return new Promise((resolve, reject) => {	
 			connect(async (client) => {
 				const collection = client.db("sensors").collection("measurements")
-				collection.find().toArray().then(resolve)
+				collection.find(filter).sort({ time: - 1 }).limit(limit).toArray().then(resolve)
 			})
 		})
 	},
