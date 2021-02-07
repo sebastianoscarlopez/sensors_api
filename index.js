@@ -17,9 +17,9 @@ app.get('/time', (req, res) => {
 })
 
 app.get('/measurements', async (req, res) => {
-	const { sensorid, time, value, datalength='10' } = req.query
+	const { sensorid, time, value, datalength='10', skip='0' } = req.query
 	const filter = { sensorid }
-	const values = await measurements.get({ sensorid, limit: parseInt(datalength })
+	const values = await measurements.get({ sensorid, limit: parseInt(datalength), skip: parseInt(skip) })
 	res.send(values)
 })
 
@@ -27,6 +27,10 @@ app.get('/save', (req, res) => {
 	const { sensorid, time = getTime(), value } = req.query
 	const id = measurements.insert({ sensorid, time, value })
 	res.send('')
+})
+
+app.get('/total', (req, res) => {
+	res.send(measurements.total())
 })
 
 app.get('/reset', (req, res) => {

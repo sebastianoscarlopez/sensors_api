@@ -18,11 +18,19 @@ export const measurements = {
 			collection.insertOne({ sensorid, time, value })
 		})
 	},
-	get: async ({ filter, limit }) => {
+	get: async ({ filter, limit, skip }) => {
 		return new Promise((resolve, reject) => {	
 			connect(async (client) => {
 				const collection = client.db("sensors").collection("measurements")
-				collection.find(filter).sort({ time: - 1 }).limit(limit).toArray().then(resolve)
+				collection.find(filter).sort({ time: - 1 }).limit(limit).skip(skip).toArray().then(resolve)
+			})
+		})
+	},
+	total: async () => {
+		return new Promise((resolve, reject) => {	
+			connect(async (client) => {
+				const collection = client.db("sensors").collection("measurements")
+				collection.sort({ sensorid: - 1 }).aggregate([{ $group: {_id: "$sensorid", total: {$sum:1} } }]).toArray().then(resolve)
 			})
 		})
 	},
